@@ -210,9 +210,9 @@ public class StockDatas implements Serializable {
                 if (j == 0) lData.writeExcelHeader(sheet.createRow(j++));
 
                 if (lData.isNew()) {
-                    logger.info("#### [{}] {} : Score {} - 신규상장 {}", i + 1, lData.getItem().getName(), lData.getScore(), lData.getIsNewDate());
+//                    logger.info("#### [{}] {} : Score {} - 신규상장 {}", i + 1, lData.getItem().getName(), lData.getScore(), lData.getIsNewDate());
                 } else if (lData.isSkip) {
-                    logger.info("#### [{}] {} : Score {} - isSkip {}", i + 1, lData.getItem().getName(), lData.getScore(), lData.getIsStopDate());
+//                    logger.info("#### [{}] {} : Score {} - isSkip {}", i + 1, lData.getItem().getName(), lData.getScore(), lData.getIsStopDate());
                 } else {
                     logger.info("#### [{}] {}({}) : Score {} - 거래량 위치/비율 {}/{}", i + 1, lData.getItem().getName(), lData.getId(), lData.getScore(), lData.getVolumeMaxPos(), lData.getVolumeMaxRate());
                     String lPer = printPER(lData.getItem().getCode());
@@ -220,7 +220,10 @@ public class StockDatas implements Serializable {
                     String lCo = printCoInfo(lData.getItem().getCode());
 
                     lData.writeExcelRow(sheet.createRow(j++), lPer, lBoard, lCo);
-                    if (++k == 7) break;
+                    if (++k > 7) {
+                        if (lData.getVolumeMaxPos() < 1) continue;
+                        break;
+                    }
                 }
             }
 
@@ -231,6 +234,39 @@ public class StockDatas implements Serializable {
         }
     }
 
+    public void scoreExcel() {
+        try {
+            System.out.print("start..\n\n");
+
+            int lSize = datas.size();
+            for (int i=0; i < lSize; i++) {
+                int lFlag = 0;
+                StockData lData = datas.get(i);
+                String lCode = lData.getItem().getCode();
+
+                if (lData.isNew() || lData.isSkip) continue;
+                else {
+                    String lBaseUrl = "http://finance.naver.com/item/board.nhn?";
+
+                    String lUrl = lBaseUrl+ "code="+ lCode;
+                    Document doc = Jsoup.connect(lUrl).get();
+                    Elements lElem = doc.select(".section");
+                    String lElemStr = lElem.toString();
+                    String lOut = "";
+                    for (String wording : Constants.BOARD_WORDINGS) {
+                        boolean a = lElemStr.contains(wording);
+                        if (a) {
+                            lFlag++;
+                            lOut += wording+ ", ";
+                        }
+                    }
+                    if (lFlag>=2 && lOut != null) System.out.println("[게시판] "+ lData.getItem().getName()+": "+ lOut);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     String printCoInfo(String code) {
         String lBaseUrl = "http://finance.naver.com/item/coinfo.nhn?";
@@ -277,6 +313,7 @@ public class StockDatas implements Serializable {
 
         return lRet;
     }
+
 
 
     String printPER(String code) {

@@ -15,6 +15,18 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	// 롬복(Lombok)
+	implementation group: 'org.projectlombok', name: 'lombok', version: '1.18.12'
+	annotationProcessor 'org.projectlombok:lombok'
+
+	// JSoup (웹크롤링, stock 패키지)
+	implementation 'org.jsoup:jsoup:1.13.1'
+
+	// 엑셀
+	implementation 'org.apache.poi:poi:3.7'
+	implementation 'org.apache.poi:poi-ooxml:3.7'
+
 }
 
 test {
