@@ -72,6 +72,16 @@ public class StockTest {
     }
 
     @Test
+    public void scoreStocks2() {
+        StockDatas lStockDatas = StockDatas.serialFromFile();
+        lStockDatas.collectDatas();
+        lStockDatas.scoreExcel();
+
+        logger.info("#### Completed..");
+
+    }
+
+    @Test
     public void scoreStocks_old() {
         StockDatas lTmp = new StockDatas();
         StockDatas lStockDatas = lTmp.serialFromFile();
