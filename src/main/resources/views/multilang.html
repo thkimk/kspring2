@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h1>i18n 테스트</h1>
+
+<!--    thymeleaf에서 MessageSource의 메시지를 가져오기 위해서는 #{속성명}을 작성해주면 됨
+        즉, product, product.category는 messages.properties 파일에서 언어별로 텍스트를 정의해줄 것임-->
+    <p th:text="#{product}"></p>
+    <p th:text="#{product.category}"></p>
+</body>
+</html>

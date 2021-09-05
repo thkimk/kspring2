@@ -70,9 +70,25 @@ public class StockTest {
         // 기업개요
 
     }
-
     @Test
     public void scoreStocks2() {
+        StockDatas lStockDatas = StockDatas.serialFromFile();
+        lStockDatas.collectDatas();
+        lStockDatas.score2();
+
+/*
+        // 점수(Score) 매기기 (점수가 가장 높은 종목순으로 소팅)
+        StockDatas lStockDatas2 = StockDatas.serialFromFile();
+        lStockDatas2.collectDatas();
+        lStockDatas2.score7();
+*/
+        logger.info("#### Completed..");
+
+        // 기업개요
+
+    }
+    @Test
+    public void scoreStocks3() {
         StockDatas lStockDatas = StockDatas.serialFromFile();
         lStockDatas.collectDatas();
         lStockDatas.scoreExcel();

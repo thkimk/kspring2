@@ -38,7 +38,7 @@ public class Constants {
 
     public static final int SCORE_SEL_COUNT = 30;
     public static final int SCORE_SEL_COUNT2 = 50;
-    public static final int CRAWLING_COUNT = 6; // 6*10 일치
+    public static final int CRAWLING_COUNT = 2; // 6*10 일치
     public static int STOCK_TYPE = 1; // 6*10 일치
 
     public Constants() {
@@ -57,7 +57,8 @@ public class Constants {
         STOCK_TYPE = 2;
     }
 
-    public static final String[] BOARD_WORDINGS = {"상한", "떡상", "가즈아", "관련주"};
+//    public static final String[] BOARD_WORDINGS = {"상한", "떡상", "가즈아", "관련주"};
+    public static final String[] BOARD_WORDINGS = {"한강","손절","무덤"};
 //    public static final String[] BOARD_WORDINGS = {"무덤", "상폐", "잡주", "무덤", "증자", "안녕", "곡소리",
 //        "유증", "개미", "쓰레기", "부도", "장투", "드디어", "손절", "바닥", "알바", "외인", "기관", "들어", "조정",
 //        "손실", "노답", "안티", "거품", "쇼크", "답답", "IR", "관리", "기회", "마지막", "타이밍"};

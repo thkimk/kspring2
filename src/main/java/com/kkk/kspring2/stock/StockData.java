@@ -46,6 +46,10 @@ public class StockData implements Serializable {
     float volumeMaxRate = 0;
     int volumeMaxPos = 0;
 
+    float volumeMinRate = 0;
+    int volumeMinPos = 0;
+    float rate10days = 0;
+
 /*
     // 스코어 기준
     float widthValue;    // (max/min) : 클수록 좋음
@@ -165,7 +169,7 @@ public class StockData implements Serializable {
     }
 
     public void setAllData() {
-        int lValueSum=0, lVolumeSum=0, lVolumeMax=0;
+        int lValueSum=0, lVolumeSum=0, lVolumeMax=0, lVolumeMin=0;
         int lSize = 20; // data.size();
         for (int i=0; i<lSize; i++) {
             StockUnit lUnit = data.get(i);
@@ -178,6 +182,8 @@ public class StockData implements Serializable {
             if (i == 0) {
                 currValue = lOpen;
                 currVolume = lVolume;
+                lVolumeMax = lVolume;
+                lVolumeMin = lVolume;
             }
 
             if (lVolume<Constants.SKIP_VOLUME_MIN ||
@@ -196,7 +202,10 @@ public class StockData implements Serializable {
                 lVolumeMax = lVolume;
                 volumeMaxPos = i;
             }
-
+            if (lVolumeMin > lVolume) {
+                lVolumeMin = lVolume;
+                volumeMinPos = i;
+            }
             lValueSum += lClose;
             lVolumeSum += lVolume;
         }
@@ -204,9 +213,11 @@ public class StockData implements Serializable {
         avgVolume = lVolumeSum / lSize;
         avgValue = lValueSum / lSize;
         volumeMaxRate = (avgVolume==0? 0f : ((float)lVolumeMax / avgVolume));
+        volumeMinRate = (avgVolume==0? 0f : ((float)lVolumeMin / avgVolume));
+        rate10days = (float)data.get(0).getCloseValue() / data.get(9).getCloseValue();
 
-        if (isNew) logger.info(" --> 신규상장 종목 : {} / {}", item.getName(), isNewDate);
-        else if (isSkip) logger.info(" --> 미대상 종목 : {} / {}원 / {}건", item.getName(), currValue, currVolume);
+//        if (isNew) logger.info(" --> 신규상장 종목 : {} / {}", item.getName(), isNewDate);
+//        else if (isSkip) logger.info(" --> 미대상 종목 : {} / {}원 / {}건", item.getName(), currValue, currVolume);
     }
 
     public void setAllData2nd() {

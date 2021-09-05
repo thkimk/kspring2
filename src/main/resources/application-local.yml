@@ -1,0 +1,15 @@
+# WAS서버 설정
+server:
+  address: localhost
+  port: 8091
+  connection-timeout: 10000
+
+#logging:
+#  register-shutdown-hook: false
+#  config: /data/genie/airmap2/config/logback.xml
+#  level:
+#    root: INFO
+#    com.kt.weather: INFO
+#    org.apache.http: INFO
+#    org.mybatis: WARN
+

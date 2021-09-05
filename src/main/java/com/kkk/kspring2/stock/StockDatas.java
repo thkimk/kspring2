@@ -121,7 +121,7 @@ public class StockDatas implements Serializable {
                 return d1.getMinVolume() > d2.getMinVolume()? 1: -1;
             }
         });
-        lSize = (int)(datas.size()*0.2);
+        lSize = (int)(datas.size()*0.1);    // 0.2 --> 0.1
         for (int i=0; i<lSize; i++) {
             datas.remove(0);
         }
@@ -174,15 +174,25 @@ public class StockDatas implements Serializable {
         }
 
         /*************** #2 : 회복할까? ******************/
+//        Collections.sort(datas, new Comparator<StockData>() {
+//            @Override
+//            public int compare(StockData d1, StockData d2) {
+//                // d1이 더 크면 1, 같으면 0, 작으면 -1
+//                if (d1.getVolumeMaxPos() == d2.getVolumeMaxPos()) return 0;
+//                return d1.getVolumeMaxPos() > d2.getVolumeMaxPos()? 1: -1;
+//            }
+//        });
         Collections.sort(datas, new Comparator<StockData>() {
             @Override
             public int compare(StockData d1, StockData d2) {
                 // d1이 더 크면 1, 같으면 0, 작으면 -1
-                if (d1.getVolumeMaxPos() == d2.getVolumeMaxPos()) return 0;
+                if (d1.getVolumeMaxPos() == d2.getVolumeMaxPos()) {
+                    if (d1.getVolumeMaxRate() == d2.getVolumeMaxRate()) return 0;
+                    return d1.getVolumeMaxRate() > d2.getVolumeMaxRate()? -1: 1;
+                }
                 return d1.getVolumeMaxPos() > d2.getVolumeMaxPos()? 1: -1;
             }
         });
-
 
 
         /*************** #Summary ******************/
@@ -214,7 +224,7 @@ public class StockDatas implements Serializable {
                 } else if (lData.isSkip) {
 //                    logger.info("#### [{}] {} : Score {} - isSkip {}", i + 1, lData.getItem().getName(), lData.getScore(), lData.getIsStopDate());
                 } else {
-                    logger.info("#### [{}] {}({}) : Score {} - 거래량 위치/비율 {}/{}", i + 1, lData.getItem().getName(), lData.getId(), lData.getScore(), lData.getVolumeMaxPos(), lData.getVolumeMaxRate());
+                    logger.info("#### [{}] {}({}) : Score {} - 거래량 위치/비율 {}/{}", i + 1, lData.getItem().getName(), lData.getItem().getCode(), lData.getScore(), lData.getVolumeMaxPos(), lData.getVolumeMaxRate());
                     String lPer = printPER(lData.getItem().getCode());
                     String lBoard = printBoardInfo(lData.getItem().getCode());
                     String lCo = printCoInfo(lData.getItem().getCode());
@@ -233,7 +243,88 @@ public class StockDatas implements Serializable {
             e.printStackTrace();
         }
     }
+    public void score2() {
+        preScore();
 
+        /*************** #1 : 떨어진다 ******************/
+//        int lSize = datas.size();
+//        Collections.sort(datas, new Comparator<StockData>() {
+//            @Override
+//            public int compare(StockData d1, StockData d2) {
+//                // d1이 더 크면 1, 같으면 0, 작으면 -1
+//                if (d1.getVolumeMaxRate() == d2.getVolumeMaxRate()) return 0;
+//                return d1.getVolumeMaxRate() > d2.getVolumeMaxRate()? 1: -1;
+//            }
+//        });
+//        for (int i=0; i<lSize; i++) {
+//            StockData lData = datas.get(0);
+//            if (lData.getVolumeMaxRate() > 2) break;
+//
+//            datas.remove(0);
+//        }
+
+        /*************** #2 : 회복할까? ******************/
+        Collections.sort(datas, new Comparator<StockData>() {
+            @Override
+            public int compare(StockData d1, StockData d2) {
+                // d1이 더 크면 1, 같으면 0, 작으면 -1
+                if (d1.getVolumeMinPos() == d2.getVolumeMinPos()) {
+                    if (d1.getRate10days() == d2.getRate10days()) return 0;
+                    return d1.getRate10days() > d2.getRate10days()? 1: -1;
+                }
+                return d1.getVolumeMinPos() > d2.getVolumeMinPos()? 1: -1;
+            }
+        });
+
+
+        /*************** #Summary ******************/
+        logger.info("#### "+ Constants.STOCK_FILE);
+        int loopCount = datas.size();
+        for (int i=0; i< datas.size(); i++) {
+            StockData lData = datas.get(i);
+            if (lData.isNew()) continue;
+            else if (lData.isStop()) continue;
+            else {
+                System.out.print(lData.getItem().getName()+ ", ");
+            }
+        }
+
+        try {
+            XSSFWorkbook workbook = new XSSFWorkbook();
+            FileOutputStream fos = new FileOutputStream(Constants.STOCK_RESULT_FILE);
+            XSSFSheet sheet = workbook.createSheet("result");    // sheet 생성
+
+            System.out.print("\n\n");
+
+            int k=0;
+            for (int i=0, j=0; i < loopCount; i++) {
+                StockData lData = datas.get(i);
+                if (j == 0) lData.writeExcelHeader(sheet.createRow(j++));
+
+                if (lData.isNew()) {
+//                    logger.info("#### [{}] {} : Score {} - 신규상장 {}", i + 1, lData.getItem().getName(), lData.getScore(), lData.getIsNewDate());
+                } else if (lData.isSkip) {
+//                    logger.info("#### [{}] {} : Score {} - isSkip {}", i + 1, lData.getItem().getName(), lData.getScore(), lData.getIsStopDate());
+                } else {
+                    if (lData.getVolumeMinPos() >= 2) break;
+                    else if (lData.getRate10days() >= 1.0) continue;
+                    else if (k++ > 9) break;
+
+                    logger.info("#### [{}] {}({}) : Score {} - 거래량 위치/min비율, 10일간 상태 {}/{}, {}", i + 1, lData.getItem().getName(), lData.getItem().getCode(), lData.getScore(), lData.getVolumeMinPos(), lData.getVolumeMinRate(), lData.getRate10days());
+                    String lPer = printPER(lData.getItem().getCode());
+                    String lBoard = printBoardInfo(lData.getItem().getCode());
+                    String lCo = printCoInfo(lData.getItem().getCode());
+
+                    lData.writeExcelRow(sheet.createRow(j++), lPer, lBoard, lCo);
+                }
+            }
+
+            workbook.write(fos);
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     public void scoreExcel() {
         try {
             System.out.print("start..\n\n");
@@ -260,7 +351,7 @@ public class StockDatas implements Serializable {
                             lOut += wording+ ", ";
                         }
                     }
-                    if (lFlag>=2 && lOut != null) System.out.println("[게시판] "+ lData.getItem().getName()+": "+ lOut);
+                    if (lFlag>=1 && lOut != null) System.out.println("[게시판] "+ lData.getItem().getName()+": "+ lOut);
                 }
             }
         } catch (Exception e) {
