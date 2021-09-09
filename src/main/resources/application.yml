@@ -3,5 +3,5 @@ spring:
     active: local
 
   messages:
-    basename: messages/message
+    basename: classpath:/messages/message
     encoding: UTF-8

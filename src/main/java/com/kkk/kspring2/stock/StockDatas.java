@@ -310,7 +310,7 @@ public class StockDatas implements Serializable {
                     else if (lData.getRate10days() >= 1.0) continue;
                     else if (k++ > 9) break;
 
-                    logger.info("#### [{}] {}({}) : Score {} - 거래량 위치/min비율, 10일간 상태 {}/{}, {}", i + 1, lData.getItem().getName(), lData.getItem().getCode(), lData.getScore(), lData.getVolumeMinPos(), lData.getVolumeMinRate(), lData.getRate10days());
+                    logger.info("#### [{}] {}({}) : Score {} - 거래량 위치/min비율, 10일간 상태 {}/{}, {}", i + 1, lData.getItem().getName(), lData.getItem().getCode(), lData.getScore(), lData.getVolumeMinPos(), lData.getVolumeMinRate(), (lData.getRate10days()-1)*100);
                     String lPer = printPER(lData.getItem().getCode());
                     String lBoard = printBoardInfo(lData.getItem().getCode());
                     String lCo = printCoInfo(lData.getItem().getCode());

@@ -2,6 +2,7 @@ package com.kkk.kspring2.multilang;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
@@ -15,10 +16,11 @@ public class MultiLangConfig {
      * 즉, Locale.US로 설정했으면 messages_en_US.properties에 작성된 텍스트가 보여지게 됨
      * @return
      */
-//    @Bean
+//    @Bean(name="localeResolver")
 //    public LocaleResolver localeResolver() {
 //        SessionLocaleResolver sessionLocaleResolver = new SessionLocaleResolver();
-//        sessionLocaleResolver.setDefaultLocale(Locale.KOREAN);      // <---- 해당 값을 수정하여 언어 결정
+////        sessionLocaleResolver.setDefaultLocale(Locale.KOREAN);      // <---- 해당 값을 수정하여 언어 결정
+//
 //        return sessionLocaleResolver;
 //    }
 

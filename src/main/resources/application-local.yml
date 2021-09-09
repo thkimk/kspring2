@@ -4,6 +4,14 @@ server:
   port: 8091
   connection-timeout: 10000
 
+# Spring 설정
+# Spring-mvc가 스프링에 jsp-View 연결하는거였군
+spring:
+  mvc:
+    view:
+      prefix: /WEB-INF/jsp/
+      suffix: .jsp
+
 #logging:
 #  register-shutdown-hook: false
 #  config: /data/genie/airmap2/config/logback.xml

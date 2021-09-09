@@ -70,6 +70,6 @@ public class Constants {
         STOCK_FILE = String.format("d:/stock/stockDatas_%02d%02d.obj", month, day);
         STOCK_RESULT_FILE = String.format("d:/stock/stock_%02d%02d.xlsx", month, day);
         STOCK_RESULT_FILE1 = String.format("d:/stock/stock_%02d%02d_1.xlsx", month, day);
-        STOCK_FILE = "d:/stock/stockDatas_0801.obj";
+//        STOCK_FILE = "d:/stock/stockDatas_0801.obj";
     }
 }
