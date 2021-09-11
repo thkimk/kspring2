@@ -7,10 +7,18 @@ server:
 # Spring 설정
 # Spring-mvc가 스프링에 jsp-View 연결하는거였군
 spring:
+  # Spring-MVC
   mvc:
     view:
       prefix: /WEB-INF/jsp/
       suffix: .jsp
+
+  # Spring-Thymeleaf
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    cache: false
+    view-names: thymeleaf/*
 
 #logging:
 #  register-shutdown-hook: false
