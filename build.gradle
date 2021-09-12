@@ -34,6 +34,10 @@ dependencies {
 	// JSP 연결 (spring.mvc.view.prefix/suffix)
 	implementation('org.apache.tomcat.embed:tomcat-embed-jasper')	// 서블릿 엔진 (내장톰캣에 JSP 사용시 필요 : 외부톰캣 = 내장톰캣 + 서블릿엔진)
 	implementation('javax.servlet:jstl:1.2')
+	
+	// 스프링 시큐리티
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+
 }
 
 test {

@@ -1,10 +1,13 @@
 package com.kkk.kspring2.multilang;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
+import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import java.util.Locale;
@@ -24,13 +27,60 @@ public class MultiLangConfig {
 //        return sessionLocaleResolver;
 //    }
 
-/*    @Bean
-    public CookieLocaleResolver localeResolver() {
+
+    /**
+     * 메세지 소스를 생성한다.
+     */
+    @Bean
+    public ReloadableResourceBundleMessageSource messageSource(
+            @Value("${spring.messages.basename}") String basename,
+            @Value("${spring.messages.encoding}") String encoding) {
+        ReloadableResourceBundleMessageSource source = new ReloadableResourceBundleMessageSource();
+
+        // 메세지 프로퍼티파일의 위치와 이름을 지정한다.
+        source.setBasename(basename);
+
+        // 기본 인코딩을 지정한다.
+        source.setDefaultEncoding(encoding);
+
+        // 프로퍼티 파일의 변경을 감지할 시간 간격을 지정한다.
+        source.setCacheSeconds(60);
+
+        // 없는 메세지일 경우 예외를 발생시키는 대신 코드를 기본 메세지로 한다.
+        source.setUseCodeAsDefaultMessage(true);
+
+        return source;
+    }
+
+
+    /**
+     * 변경된 언어 정보를 기억할 로케일 리졸버를 생성한다.
+     * 여기서는 세션에 저장하는 방식을 사용한다.
+     * @return
+     */
+    @Bean
+    public LocaleResolver localeResolver() {
         CookieLocaleResolver localeResolver = new CookieLocaleResolver();
         localeResolver.setDefaultLocale(Locale.KOREA); // 기본 한국어
         localeResolver.setCookieName("locale"); // 쿠키 이름 ; locale
         localeResolver.setCookieMaxAge(60 * 60); // 쿠키 살려둘 시간, -1로 하면 브라우져를 닫을 때 없어짐.
         localeResolver.setCookiePath("/"); // Path를 지정해 주면 해당하는 path와 그 하위 path에서만 참조
         return localeResolver;
-    }*/
+    }
+
+//    @Bean
+//    public LocaleResolver localeResolver() {
+//        return new SessionLocaleResolver();
+//    }
+
+    /**
+     * 언어 변경을 위한 인터셉터를 생성한다.
+     */
+    @Bean
+    public LocaleChangeInterceptor localeChangeInterceptor() {
+        LocaleChangeInterceptor interceptor = new LocaleChangeInterceptor();
+        interceptor.setParamName("lang");
+
+        return interceptor;
+    }
 }
