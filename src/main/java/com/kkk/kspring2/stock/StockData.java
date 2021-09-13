@@ -168,10 +168,10 @@ public class StockData implements Serializable {
         }
     }
 
-    public void setAllData() {
+    public void setAllData(int p_start) {
         int lValueSum=0, lVolumeSum=0, lVolumeMax=0, lVolumeMin=0;
         int lSize = 20; // data.size();
-        for (int i=0; i<lSize; i++) {
+        for (int i=p_start; i<lSize; i++) {
             StockUnit lUnit = data.get(i);
             StockUnit lUnitOld = data.get(i+1);
 
@@ -179,7 +179,7 @@ public class StockData implements Serializable {
             int lClose = lUnit.getCloseValue();
             int lVolume = lUnit.getVolume();
 
-            if (i == 0) {
+            if (i == p_start) {
                 currValue = lOpen;
                 currVolume = lVolume;
                 lVolumeMax = lVolume;
@@ -214,7 +214,7 @@ public class StockData implements Serializable {
         avgValue = lValueSum / lSize;
         volumeMaxRate = (avgVolume==0? 0f : ((float)lVolumeMax / avgVolume));
         volumeMinRate = (avgVolume==0? 0f : ((float)lVolumeMin / avgVolume));
-        rate10days = (float)data.get(0).getCloseValue() / data.get(9).getCloseValue();
+        rate10days = (float)data.get(p_start).getCloseValue() / data.get(p_start+9).getCloseValue();
 
 //        if (isNew) logger.info(" --> 신규상장 종목 : {} / {}", item.getName(), isNewDate);
 //        else if (isSkip) logger.info(" --> 미대상 종목 : {} / {}원 / {}건", item.getName(), currValue, currVolume);

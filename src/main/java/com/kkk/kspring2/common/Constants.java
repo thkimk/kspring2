@@ -38,7 +38,7 @@ public class Constants {
 
     public static final int SCORE_SEL_COUNT = 30;
     public static final int SCORE_SEL_COUNT2 = 50;
-    public static final int CRAWLING_COUNT = 2; // 6*10 일치
+    public static final int CRAWLING_COUNT = 3; // 6*10 일치
     public static int STOCK_TYPE = 1; // 6*10 일치
 
     public Constants() {

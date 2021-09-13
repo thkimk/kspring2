@@ -12,6 +12,7 @@ import lombok.ToString;
  * hashCode : 두 객체가 같은 객체인지, 동일성(identity) 를 비교하는 연산자
  */
 @Data
+@AllArgsConstructor
 public class LombokData {
     String strData;
     String tmpData;

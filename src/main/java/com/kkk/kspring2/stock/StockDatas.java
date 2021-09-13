@@ -105,7 +105,14 @@ public class StockDatas implements Serializable {
 
     public void collectDatas() {
         for (StockData lData : datas) {
-            lData.setAllData();
+            lData.setAllData(0);
+            lData.setAllData2nd();
+        }
+    }
+
+    public void collectDatas(int p_start) {
+        for (StockData lData : datas) {
+            lData.setAllData(p_start);
             lData.setAllData2nd();
         }
     }
@@ -153,6 +160,7 @@ public class StockDatas implements Serializable {
         }
 
     }
+
     public void score() {
         preScore();
 
@@ -243,7 +251,9 @@ public class StockDatas implements Serializable {
             e.printStackTrace();
         }
     }
-    public void score2() {
+
+
+    public List<StockData> score2() {
         preScore();
 
         /*************** #1 : 떨어진다 ******************/
@@ -289,6 +299,7 @@ public class StockDatas implements Serializable {
             }
         }
 
+        List<StockData> lDatas = new ArrayList<StockData>();
         try {
             XSSFWorkbook workbook = new XSSFWorkbook();
             FileOutputStream fos = new FileOutputStream(Constants.STOCK_RESULT_FILE);
@@ -310,12 +321,14 @@ public class StockDatas implements Serializable {
                     else if (lData.getRate10days() >= 1.0) continue;
                     else if (k++ > 9) break;
 
-                    logger.info("#### [{}] {}({}) : Score {} - 거래량 위치/min비율, 10일간 상태 {}/{}, {}", i + 1, lData.getItem().getName(), lData.getItem().getCode(), lData.getScore(), lData.getVolumeMinPos(), lData.getVolumeMinRate(), (lData.getRate10days()-1)*100);
-                    String lPer = printPER(lData.getItem().getCode());
-                    String lBoard = printBoardInfo(lData.getItem().getCode());
-                    String lCo = printCoInfo(lData.getItem().getCode());
+                    lDatas.add(lData);
 
-                    lData.writeExcelRow(sheet.createRow(j++), lPer, lBoard, lCo);
+//                    logger.info("#### [{}] {}({}) : Score {} - 거래량 위치/min비율, 10일간 상태 {}/{}, {}", i + 1, lData.getItem().getName(), lData.getItem().getCode(), lData.getScore(), lData.getVolumeMinPos(), lData.getVolumeMinRate(), (lData.getRate10days()-1)*100);
+//                    String lPer = printPER(lData.getItem().getCode());
+//                    String lBoard = printBoardInfo(lData.getItem().getCode());
+//                    String lCo = printCoInfo(lData.getItem().getCode());
+
+//                    lData.writeExcelRow(sheet.createRow(j++), lPer, lBoard, lCo);
                 }
             }
 
@@ -324,6 +337,8 @@ public class StockDatas implements Serializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        return lDatas;
     }
     public void scoreExcel() {
         try {
