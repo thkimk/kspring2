@@ -5,3 +5,9 @@ spring:
   messages:
     basename: classpath:/messages/message
     encoding: UTF-8
+
+#mybatis:
+#  executor-type: REUSE
+#  mapper-locations:
+#    - "classpath:/mappers/default-maps/*.xml"
+

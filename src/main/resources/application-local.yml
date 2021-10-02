@@ -3,6 +3,11 @@ server:
   address: localhost
   port: 8091
   connection-timeout: 10000
+  #JSP수정시 서버 재시작없이 바로 적용될 수 있게 설정
+#  servlet:
+#    jsp:
+#      init-parameters:
+#        development: true
 
 # Spring 설정
 # Spring-mvc가 스프링에 jsp-View 연결하는거였군
@@ -19,6 +24,32 @@ spring:
     suffix: .html
     cache: false
     view-names: thymeleaf/*
+
+  # Default Datasource (url)
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/testdb?serverTimezone=UTC&characterEncoding=euckr&useUnicode=true&mysqlEncoding=euckr
+    username: root
+    password: thkim123
+#    driverClassName: org.postgresql.Driver
+#    jdbc-url: jdbc:postgresql://127.0.0.1:5432/postgres?currentSchema=scheme1
+#    username: postgres1
+#    password: thim123
+
+# Multi Datasources (jdbc-url)
+datasources:
+  primary-ds:
+    driver-class-name: com.mysql.jdbc.Driver
+    jdbc-url: jdbc:mysql://localhost:3306/testdb?serverTimezone=UTC&characterEncoding=euckr&useUnicode=true&mysqlEncoding=euckr
+    username: root
+    password: thkim123
+
+  second-ds:
+    driver-class-name: com.mysql.jdbc.Driver
+    jdbc-url: jdbc:mysql://localhost:3306/testdb2?serverTimezone=UTC&characterEncoding=euckr&useUnicode=true&mysqlEncoding=euckr
+    username: root
+    password: thkim123
+
 
 #logging:
 #  register-shutdown-hook: false

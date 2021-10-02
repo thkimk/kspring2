@@ -2,6 +2,8 @@ package com.kkk.kspring2;
 
 import com.kkk.kspring2.stock.StockData;
 import com.kkk.kspring2.stock.StockDatas;
+import com.kkk.kspring2.stock.StockItem;
+import com.kkk.kspring2.stock.StockUnit;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -12,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.Random;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -56,6 +59,20 @@ public class StockTest {
     @Test
     public void scoreStocks() {
         StockDatas lStockDatas = StockDatas.serialFromFile();
+        lStockDatas.collectDatas(1);
+        List<StockData> lDatas1 = lStockDatas.score2();
+
+        for (StockData data1 : lDatas1) {
+            StockItem lItem = data1.getItem();
+            logger.info("#### [0] {}({}) : Score {} - 거래량 위치/min비율, 10일간 상태 {}/{}, {}", lItem.getName(), lItem.getCode(), data1.getScore(), data1.getVolumeMinPos(), data1.getVolumeMinRate(), (data1.getRate10days()-1)*100);
+
+        }
+
+    }
+
+    @Test
+    public void scoreStocks4() {
+        StockDatas lStockDatas = StockDatas.serialFromFile();
         lStockDatas.collectDatas(0);
         List<StockData> lDatas0 = lStockDatas.score2();
 
@@ -64,11 +81,19 @@ public class StockTest {
         List<StockData> lDatas1 = lStockDatas.score2();
 
         for (StockData data0 : lDatas0) {
-            logger.info("#### [0] {}({}) : Score {} - 거래량 위치/min비율, 10일간 상태 {}/{}, {}", data0.getItem().getName(), data0.getItem().getCode(), data0.getScore(), data0.getVolumeMinPos(), data0.getVolumeMinRate(), (data0.getRate10days()-1)*100);
+            StockItem lItem = data0.getItem();
+            logger.info("#### [0] {}({}) : Score {} - 거래량 위치/min비율, 10일간 상태 {}/{}, {}", lItem.getName(), lItem.getCode(), data0.getScore(), data0.getVolumeMinPos(), data0.getVolumeMinRate(), (data0.getRate10days()-1)*100);
+
             for (StockData data1 : lDatas1) {
-                if (data0.getItem().getCode().equals(data1.getItem().getCode())) {
-                    logger.info("######## [1] {}({}) : Score {} - 거래량 위치/min비율, 10일간 상태 {}/{}, {}", data0.getItem().getName(), data0.getItem().getCode(), data0.getScore(), data0.getVolumeMinPos(), data0.getVolumeMinRate(), (data0.getRate10days()-1)*100);
+                if (lItem.getCode().equals(data1.getItem().getCode())) {
+                    logger.info("######## [1] {}({}) : Score {} - 거래량 위치/min비율, 10일간 상태 {}/{}, {}", lItem.getName(), lItem.getCode(), data0.getScore(), data0.getVolumeMinPos(), data0.getVolumeMinRate(), (data0.getRate10days()-1)*100);
                 }
+            }
+
+            StockUnit lUnit = data0.getData().get(0);
+            float lWidth = (float)lUnit.getHighValue()/lUnit.getLowValue();
+            if (lWidth>1.015 && lWidth<1.025) {
+                logger.info("######## [2] {}({}) : Score {} - 거래량 위치/min비율, 10일간 상태 {}/{}, {}", lItem.getName(), lItem.getCode(), data0.getScore(), data0.getVolumeMinPos(), data0.getVolumeMinRate(), (data0.getRate10days()-1)*100);
             }
         }
 
@@ -124,6 +149,42 @@ public class StockTest {
 
         // 기업개요
 
+    }
+
+    @Test
+    public void calBunsan() {
+        Random rand = new Random();
+//        int[] intArr = new int[5]; // 정수 5개 담는 배열
+        int sum = 0; // 평균을 구하기 위해 합계변수 설정
+        double dev = 0; // 분산, 표준편차를 위해 편차변수 설정
+        double devSqvSum = 0; // 편차제곱합
+        double avg; // 평균
+        double var; // 분산
+        double std; // 표준편차
+
+        // 1 ~ 100 범위의 난수 배열원소 갯수만큼 생성
+/*
+        for (int i = 0; i < intArr.length; i++) {
+            intArr[i] = rand.nextInt(100) + 1; // 100도 포함됨. 난수 도출
+            sum += intArr[i]; // 합계에 누적시킴
+            System.out.print(intArr[i] + " "); // 난수 출력
+        } // end for
+*/
+
+        int[] intArr = {3, 3, 3, 3, 3};
+        for (int i=0; i<intArr.length; i++) sum += intArr[i];
+        avg = sum / intArr.length; // 평균 도출
+
+        for (int i = 0; i < intArr.length; i++) {
+            dev = (intArr[i] - avg); // 편차를 구하고,
+            devSqvSum += Math.pow(dev, 2); // 편차제곱합에 누적시킴
+        } // end for
+
+        var = devSqvSum / intArr.length; // 분산 도출
+        std = Math.sqrt(var); // 표준편차 도출
+
+        System.out.print("\n평균:" + avg + "\n분산:" + var +
+                "\n표준편차:" + std ); // 평균, 분산, 표준편차 출력
     }
 
 }

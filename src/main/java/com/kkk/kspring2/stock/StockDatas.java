@@ -125,7 +125,7 @@ public class StockDatas implements Serializable {
             public int compare(StockData d1, StockData d2) {
                 // d1이 더 크면 1, 같으면 0, 작으면 -1
                 if (d1.getMinVolume() == d2.getMinVolume()) return 0;
-                return d1.getMinVolume() > d2.getMinVolume()? 1: -1;
+                return d1.getMinVolume() > d2.getMinVolume() ? 1 : -1;
             }
         });
         lSize = (int)(datas.size()*0.1);    // 0.2 --> 0.1
@@ -138,7 +138,7 @@ public class StockDatas implements Serializable {
             public int compare(StockData d1, StockData d2) {
                 // d1이 더 크면 1, 같으면 0, 작으면 -1
                 if (d1.getMinValue() == d2.getMinValue()) return 0;
-                return d1.getMinValue() > d2.getMinValue()? 1: -1;
+                return d1.getMinValue() > d2.getMinValue() ? 1 : -1;
             }
         });
         lSize = (int)(datas.size()*0.1);
@@ -257,7 +257,7 @@ public class StockDatas implements Serializable {
         preScore();
 
         /*************** #1 : 떨어진다 ******************/
-//        int lSize = datas.size();
+        int lSize = datas.size();
 //        Collections.sort(datas, new Comparator<StockData>() {
 //            @Override
 //            public int compare(StockData d1, StockData d2) {
@@ -282,10 +282,24 @@ public class StockDatas implements Serializable {
                     if (d1.getRate10days() == d2.getRate10days()) return 0;
                     return d1.getRate10days() > d2.getRate10days()? 1: -1;
                 }
-                return d1.getVolumeMinPos() > d2.getVolumeMinPos()? 1: -1;
+                else return d1.getVolumeMinPos() > d2.getVolumeMinPos()? 1: -1;
             }
         });
+        for (int i=0; i<lSize; i++) {
+            StockData lData = datas.get(i);
+            if (lData.getVolumeMinPos() < 4) continue;
 
+            datas.remove(i--); lSize--;
+        }
+
+        Collections.sort(datas, new Comparator<StockData>() {
+            @Override
+            public int compare(StockData d1, StockData d2) {
+                // d1이 더 크면 1, 같으면 0, 작으면 -1
+                if (d1.getBunsanRate() == d2.getBunsanRate()) return 0;
+                else return d1.getBunsanRate() > d2.getBunsanRate()? -1: 1;
+            }
+        });
 
         /*************** #Summary ******************/
         logger.info("#### "+ Constants.STOCK_FILE);
@@ -319,7 +333,7 @@ public class StockDatas implements Serializable {
                 } else {
                     if (lData.getVolumeMinPos() >= 2) break;
                     else if (lData.getRate10days() >= 1.0) continue;
-                    else if (k++ > 9) break;
+                    else if (k++ > 14) break;
 
                     lDatas.add(lData);
 

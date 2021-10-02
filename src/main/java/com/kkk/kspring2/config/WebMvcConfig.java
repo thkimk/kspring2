@@ -43,7 +43,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addInterceptor(localeChangeInterceptor);
     }
 
-    @Override
+/*    @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         // registry.addViewController("/").setViewName("forward:/index.html");
         registry.addViewController("/").setViewName("error");
@@ -64,13 +64,13 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
         configurer.enable();
-    }
+    }*/
 
     /**
      * Json 으로 응답 결과 제공 위한 MessageConverter
      * @param converters
      */
-    @Override
+/*    @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         final MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
         final ObjectMapper objectMapper = new ObjectMapper();
@@ -82,5 +82,5 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void configureAsyncSupport(AsyncSupportConfigurer configurer) {
         // TODO Auto-generated method stub
         configurer.setTaskExecutor(asyncExecutor);
-    }
+    }*/
 }

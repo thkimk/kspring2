@@ -50,6 +50,9 @@ public class StockData implements Serializable {
     int volumeMinPos = 0;
     float rate10days = 0;
 
+    float bunsan = 0;
+    float bunsanRate = 0;
+
 /*
     // 스코어 기준
     float widthValue;    // (max/min) : 클수록 좋음
@@ -216,6 +219,9 @@ public class StockData implements Serializable {
         volumeMinRate = (avgVolume==0? 0f : ((float)lVolumeMin / avgVolume));
         rate10days = (float)data.get(p_start).getCloseValue() / data.get(p_start+9).getCloseValue();
 
+        bunsan = calBunsan(5);
+        bunsanRate = currVolume / bunsan;
+
 //        if (isNew) logger.info(" --> 신규상장 종목 : {} / {}", item.getName(), isNewDate);
 //        else if (isSkip) logger.info(" --> 미대상 종목 : {} / {}원 / {}건", item.getName(), currValue, currVolume);
     }
@@ -332,6 +338,31 @@ public class StockData implements Serializable {
         curRow.createCell(11).setCellValue(PPer);
         curRow.createCell(12).setCellValue(PBoard);
         curRow.createCell(13).setCellValue(PCo);
+    }
+
+    /**
+     * 분산과 표준편차는 0에 가까울수록 값의 변화가 없는 것임
+     * @param p_range
+     * @return
+     */
+    private float calBunsan(int p_range) {
+        int[] lDatas = new int[p_range];
+        int sum = 0;
+        double devSqvSum = 0;
+
+        for (int i=1; i<(p_range+1); i++) {
+            StockUnit lUnit = data.get(i);
+            lDatas[i-1] = lUnit.getVolume();
+            sum += lUnit.getVolume();
+        }
+
+        float avg = (float)(sum / p_range);
+        for (int i=0; i < p_range; i++) {
+            devSqvSum += Math.pow((lDatas[i] - avg), 2); // 편차제곱합에 누적시킴
+        } // end for
+
+        double bunsan = Math.sqrt((double)devSqvSum / p_range) / avg;
+        return (float)bunsan * avg; // 분산 도출
     }
 
 }
