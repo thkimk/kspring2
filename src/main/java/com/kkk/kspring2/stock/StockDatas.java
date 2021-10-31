@@ -331,7 +331,7 @@ public class StockDatas implements Serializable {
                 } else if (lData.isSkip) {
 //                    logger.info("#### [{}] {} : Score {} - isSkip {}", i + 1, lData.getItem().getName(), lData.getScore(), lData.getIsStopDate());
                 } else {
-                    if (lData.getVolumeMinPos() >= 2) break;
+                    if (lData.getVolumeMinPos() >= 5) break;
                     else if (lData.getRate10days() >= 1.0) continue;
                     else if (k++ > 14) break;
 

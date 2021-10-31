@@ -187,4 +187,42 @@ public class StockTest {
                 "\n표준편차:" + std ); // 평균, 분산, 표준편차 출력
     }
 
+
+    @Test
+    public void testException() {
+        try {
+            String lRet = testExcept1(100);
+            System.out.println("finish : " + lRet);
+        } catch (Exception e) {
+            System.out.println("exception-main: "+ e.getMessage());
+        }
+    }
+
+    private String testExcept1(int flag1) {
+        String lRet = "ret ok: ";
+        try {
+            if (flag1 == 10) {
+                throw new Exception();
+            } else {
+                System.out.println("before return: "+ lRet);
+                return lRet;
+            }
+        } catch (Exception e) {
+            System.out.println("exception: "+ e.getMessage());
+        } finally {
+            lRet = "modify";
+            System.out.println("finally: "+ lRet);
+        }
+
+        return "ok return";
+    }
+
+    private String testExcept2(int flag1) throws Exception {
+        if (flag1 == 10) {
+            throw new Exception();
+        } else {
+            return "ok";
+        }
+    }
+
 }

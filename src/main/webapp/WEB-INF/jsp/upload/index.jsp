@@ -5,7 +5,7 @@
     </head>
     <body>
         <form action="/upload/save" enctype="multipart/form-data">
-            <input type="file" name="u[loadFile" />
+            <input type="file" name="uploadFile" />
             <button type="submit">파일업로드</button>
         </form>
     </body>
