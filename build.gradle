@@ -47,6 +47,12 @@ dependencies {
 	// SiteMesh : SiteMesh는 웹 서버를 통해 요청된 정적 또는 동적으로 생성된 HTML 페이지에 대한 요청을 가로채서 콘텐츠를 처리 한 다음 하나 이상의 데코레이터와 병합하여 최종 결과를 만듬
 	implementation 'org.sitemesh:sitemesh:3.0.1'
 
+	//
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
+
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-webflux', version: '2.2.5.RELEASE'
+
 }
 
 test {

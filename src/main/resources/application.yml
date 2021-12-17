@@ -11,3 +11,8 @@ spring:
 #  mapper-locations:
 #    - "classpath:/mappers/default-maps/*.xml"
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics, prometheus
